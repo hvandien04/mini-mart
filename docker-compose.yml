@@ -1,0 +1,72 @@
+version: "3.9"
+
+networks:
+  mini-mart-network:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: xdhttt
+    ports:
+      - "3306:3306"
+    networks:
+      - mini-mart-network
+    volumes:
+      - mysql_storage:/var/lib/mysql
+
+  springboot:
+    build:
+      context: ./mini-mart
+    container_name: springboot-app
+    depends_on:
+        - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/xdhttt
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      PRIVATE_KEY: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFdkFJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLWXdnZ1NpQWdFQUFvSUJBUURMbWZUWmIzeE1hK09nZWR2YnNtYVZwN2xLKzlRUzRFY000bFE2K0hBQUtxYXE2NG5TWk5sVjIzWXpjV2xwTStmTEtmY0ZWZTlhUnFJS0lSN2NYY3JYMGxUd2JEbS8xS2ZscEQxRUtGM3R1VUtnN1lMbDZlZkpIWkxBMkdobis1Zyt2SWJ5aEhveXhZZ0FNdVRTbXJOV0pLck5KS0RzNU05MEg0cGdacXRTYjVXWEZKNkRncENjYnFCU05heGpnNDNuZFFBSGdmampBY2YramxBNXdMRzZBK2diSUpRWkdxSnZlUTZ4Y00wa3hMaWdtS2l2YnZBbmpaZTlMNWxCbEpoN29SK012QVhNZ1BsVGdVcUViNXJ3S1Y0bzRobm5MZXRPYVd2bVhqMHcxa0x0bURmZE1mOS8wVmRuVDdQSFdkaXZsclUrRWt0TURWeSszN1hPRCtZdkFnTUJBQUVDZ2dFQUFhbWx6WERHQ0xBaWQ3OXRhZEJLV3ZtM3JBOTlua2FsQVJoVTM4TTJCdkM0b0lTejUyNVp6bXA5TWptTlJ0S3BzU0Z5bWk0bkU5Z09PUnZBN3lvclVlWklPYkdidyt4N0QxUThDS1oxVjRMWlpndlhUUVNQL1oxRU5sYjBmT3RORWkrdjlBbDF1VFlGV2s1RFMxSE01cm1YaUVvbEZrb3JSRmEwQURDODJqdDV0L3N2cmlxdUovUFBpRXY3eTIzNCtLbWZ1bDJLQmdhTTlGR0tONGhObThZckQwdVUzYkcxZXY2Q0lRRUU3MEU2b0tIRDZPRXlXQ3o1d2trczBHVUxNSWNsbWx3SlZESjdNSjVtanJ6UTlheEZGdGJsS2hCT2pUSXA3NTJrbHVPMzF1U0dzbkJpdWRXMEdhMUFJM1Z3OVplcHpwOVp5VEZLMnpwZlEvTFhnUUtCZ1FEcUFzT1QrQ3M4cDd1UElmbmVKWnZkdkpJZDVkazVFdU96N21Xb1c3WEt2aHIzaDBqZmN3WitGMFhtdTlieHhybDVpYnU2bm1FQUYwOEhIbXpaN2E3REJDazhXSStiNStta3FIS2dzbFlUOEZBay80aFA3a3d3TDlOc21yR1RKdElwY3o3aGI4YmZZOGkwSHZuZDFKbEduU3RZR3JVdFFtQVQ1RThzQlRROXZ3S0JnUURldTY0d2k3NGIrZUdka3M4V0ZIOXBwVDZJK2dXTXZwK0YzeUlWOFlBM1RrbnRsT0FNRE81RlRMbXl0MENJOXRhdjJYTU9lY0hHMkZHSnMrOHZGRUM1S2RHUEVDODl4bk9uWHVtT2ZYTFZCUUFVMmlXK3pJNEVRUkRkSnlQMHlUTUNhdDRnTTdGY1JldkhLcHRnZzhwUjNWQjdiRWZnSzJqRDBsTGltWXhUa1FLQmdGTnlUTi9WSFVYeDRqWTJQVzMwSjFLNHpib1BucGgxbmZFcHorSnJZYlk4ZUUxUVZySW55R2JxVWFqbnpzeEV1eHNWL0hXZHlLVkpxb3ExVk1lWnREb2luN20vTXVhN21sdDNIZmtqM3dJWkxkc2pyQzRrb2RLRkczV2M3RG0zSERaZnZFcVRtMjFKbmVadExWam5XUWtQUHNlYUxvVkhLQSt2MkhPd0gyTHRBb0dBYWlzZCtjZnlvNVUxeFEyQXBxNjRtUndLTmZLdmlJb29zZ0JOV0JaWW5vUXoyd3FXelVld245blZ2bWw1V3BBR2Y2WHdJUnRLa2NUMUFPV0RBbmJ0N3hVTzdkbXlHd2tvZ2NSTklmMk1LaHdMRU9WM0RuNmt4MFJZaklJbXNuemhVcXFzSEw5bk1HdW4yclRsZ1Zqd3JKc0l6UHd0T3A2V2Zwa1hweW0zNlBFQ2dZQlhkbGhNVGlwUkVTb2t5dEhHemRSazZVdmliMnZMYVdDajc0V3Z2d0h1TWk5WTFLNkdhRmZrYTEzdDRjQm9jNzZ5WnF5a3U3Lzl1TFF5aFpDODVjdWdoU2xSZk5FTDBhMyt6dmZZUXNZdkNzM1htQktxYjlrWGRhQkFybUFnQ1lOVEVIV1VFVWdUakpkcWQ4RnN6SVY5MTJPVlBRMXFGaDZwYVRXdjVWdUpvQT09Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0t
+      PUBLIC_KEY: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF5NW4wMlc5OFRHdmpvSG5iMjdKbWxhZTVTdnZVRXVCSERPSlVPdmh3QUNxbXF1dUowbVRaVmR0Mk0zRnBhVFBueXluM0JWWHZXa2FpQ2lFZTNGM0sxOUpVOEd3NXY5U241YVE5UkNoZDdibENvTzJDNWVubnlSMlN3TmhvWi91WVByeUc4b1I2TXNXSUFETGswcHF6VmlTcXpTU2c3T1RQZEIrS1lHYXJVbStWbHhTZWc0S1FuRzZnVWpXc1k0T041M1VBQjRINDR3SEgvbzVRT2NDeHVnUG9HeUNVR1JxaWIza09zWEROSk1TNG9KaW9yMjd3SjQyWHZTK1pRWlNZZTZFZmpMd0Z6SUQ1VTRGS2hHK2E4Q2xlS09JWjV5M3JUbWxyNWw0OU1OWkM3WmczM1RIL2Y5RlhaMCt6eDFuWXI1YTFQaEpMVEExY3Z0KzF6Zy9tTHdJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0t
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    networks:
+      - mini-mart-network
+
+  frontend:
+    build:
+      context: ./mine-mart-fe
+    container_name: frontend-app
+    depends_on:
+      springboot:
+        condition: service_started
+    ports:
+      - "3000:80"
+    networks:
+      - mini-mart-network
+    restart: on-failure
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant-vector-db
+    restart: always
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    networks:
+      - mini-mart-network
+    environment:
+      QDRANT__SERVICE__GRPC_PORT: 6334
+      QDRANT__SERVICE__HTTP_PORT: 6333
+
+
+volumes:
+  mysql_storage:
+  qdrant_storage:

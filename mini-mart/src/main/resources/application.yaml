@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: mini-mart
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+jwt:
+  valid-duration-access: 3600
+  valid-duration-refresh: 36000
+gemini:
+  api:
+    key: ${GEMINI_API_KEY:}
+    url: https://generativelanguage.googleapis.com/v1beta
+
+qdrant:
+  url: ${QDRANT_URL:http://qdrant:6333}
